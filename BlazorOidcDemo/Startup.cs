@@ -1,5 +1,6 @@
 using BlazorOidcDemo.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -30,10 +31,10 @@ namespace BlazorOidcDemo
             services.AddAuthentication(options => 
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = "oidc";
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddOpenIdConnect("oidc", options => 
+            .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => 
             {
                 options.Authority = @"https://demo.identityserver.io/";
                 options.ClientId = @"interactive.confidential.short";
@@ -42,7 +43,7 @@ namespace BlazorOidcDemo
                 options.SaveTokens = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
 
-                options.Events = new Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectEvents
+                options.Events = new OpenIdConnectEvents
                 {
                     OnAccessDenied = context =>
                     {

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
@@ -12,13 +14,13 @@ namespace BlazorOidcDemo.Pages
     {
         public IActionResult OnGetLogin()
         {
-            return Challenge(AuthProps(), "oidc");
+            return Challenge(AuthProps(), OpenIdConnectDefaults.AuthenticationScheme);
         }
 
         public async Task OnGetLogout()
         {
-            await HttpContext.SignOutAsync("Cookies");
-            await HttpContext.SignOutAsync("oidc", AuthProps());
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, AuthProps());
         }
 
         private AuthenticationProperties AuthProps()
